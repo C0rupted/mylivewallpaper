@@ -1,2 +1,13 @@
 # MacOS Stuff
 .DS_Store
+
+# Testing
+test.py
+
+# Build stuff
+__pycache__/
+*.pyc
+mylivewallpaper.build/
+mylivewallpaper.dist/
+mylivewallpaper.app
+

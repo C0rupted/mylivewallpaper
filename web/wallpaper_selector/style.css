@@ -1,0 +1,168 @@
+/* Theme variables */
+:root {
+    --bg-color: #111;
+    --topbar-bg: #222;
+    --card-bg: #1a1a1a;
+    --card-border: transparent;
+    --card-border-selected: #00ffcc;
+    --button-bg: #333;
+    --button-bg-active: #00ffcc;
+    --button-color: #fff;
+    --button-color-active: #000;
+    --text-color: #fff;
+    --input-bg: #333;
+    --input-color: #fff;
+    --border-radius: 8px;
+    --gap: 1rem;
+
+    --topbar-height: 30px;
+}
+
+/* Global styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Top bar */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: var(--bg-topbar, #222);
+    flex-wrap: wrap;
+}
+
+#search-bar {
+    flex-grow: 1;
+    height: var(--topbar-height);
+    padding: 0 0.75rem;
+    border: none;
+    margin-right: 0.5rem;
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--input-color);
+}
+
+
+
+.view-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Toggle as one pill-style button */
+.view-toggle {
+    height: var(--topbar-height);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border, #555);
+    background: var(--bg-toggle, #333);
+}
+
+/* Each toggle segment */
+.view-toggle button {
+    height: 100%;
+    border: none;
+    border-radius: var(--border-radius); 
+    padding: 0 1rem;
+    background: transparent;
+    color: var(--text, #fff);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.view-toggle button.active {
+    background: var(--accent, #00ffcc);
+    color: var(--text-active, #000);
+}
+
+
+/* Open folder button */
+#open-folder-btn {
+    height: var(--topbar-height);
+    padding: 0 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border, #555);
+    background: var(--bg-toggle, #333);
+    color: var(--text, #fff);
+    cursor: pointer;
+    font-weight: 500;
+    line-height: 1;
+    transition: background 0.2s;
+}
+
+
+#open-folder-btn:hover {
+    background: var(--accent, #00ffcc);
+    color: var(--text-active, #000);
+}
+
+/* Wallpaper container */
+#wallpaper-container {
+    padding: var(--gap);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+/* Wallpaper cards */
+.wallpaper-item {
+    cursor: pointer;
+    border: 2px solid var(--card-border);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    transition: border 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.wallpaper-item:hover {
+    transform: scale(1.02);
+}
+
+.wallpaper-item.selected {
+    border-color: var(--card-border-selected);
+}
+
+.wallpaper-item img {
+    display: block;
+    width: 180px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+/* List view */
+.list .wallpaper-item {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.list .wallpaper-item img {
+    width: 120px;
+    height: 70px;
+    margin-right: 1rem;
+    border-radius: var(--border-radius);
+}
+
+/* Wallpaper name */
+.wallpaper-name {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.list .wallpaper-name {
+    margin-top: 0;
+    text-align: left;
+}

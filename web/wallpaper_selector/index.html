@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wallpaper Selector</title>
+<link rel="stylesheet" href="/web/wallpaper_selector/style.css">
+</head>
+<body>
+<div class="top-bar">
+    <input type="text" id="search-bar" placeholder="Search wallpapers..." />
+    
+    <div class="view-actions">
+        <div class="view-toggle">
+            <button id="grid-btn" class="active">Grid</button>
+            <button id="list-btn">List</button>
+        </div>
+        <button id="open-folder-btn">Open Folder</button>
+    </div>
+</div>
+
+<div id="wallpaper-container" class="grid"></div>
+
+
+<script type="module" src="/web/wallpaper_selector/main.js"></script>
+
+</body>
+</html>

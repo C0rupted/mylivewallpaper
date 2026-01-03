@@ -1,0 +1,28 @@
+.sample-widget {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: rgba(26, 26, 26, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.sample-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #00ffcc;
+  margin-bottom: 0.5rem;
+}
+
+.sample-content {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}

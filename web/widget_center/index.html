@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widget Center</title>
+    <link rel="stylesheet" href="/web/widget_center/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <!-- Widget controls panel -->
+            <div class="panel controls-panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                    <h2 style="margin:0">Available Widgets</h2>
+                    <button id="open-widgets-btn" title="Open widgets folder" class="btn btn-secondary" style="height:32px;padding:0 8px;">📁</button>
+                </div>
+                <div id="widget-list" class="widget-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Canvas preview -->
+            <div class="panel canvas-panel">
+                <h2>Preview & Edit</h2>
+                <div id="canvas-container" class="canvas-container">
+                    <div id="widgets-canvas" class="widgets-canvas">
+                        <!-- Widgets rendered here for editing -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <button id="save-btn" class="btn btn-primary">💾 Save Changes</button>
+            <button id="reset-btn" class="btn btn-secondary">↻ Reset</button>
+        </footer>
+    </div>
+
+    <script type="module" src="/web/widget_center/widget_center.js"></script>
+</body>
+</html>

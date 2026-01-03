@@ -40,7 +40,13 @@ class WebWindow:
     def create_window(self, url: str, title: str = "WebWindow", width=900, height=600, reload_on_open=True):
         """Create or show the window with the given URL."""
         if self.window is not None:
-            # Window already exists → show it
+            # Window already exists then resize it, then show it
+            screen = NSScreen.mainScreen()
+            screen_frame = screen.frame()
+            x = (screen_frame.size.width - width) / 2
+            y = (screen_frame.size.height - height) / 2
+            new_frame = ((x, y), (width, height))
+            self.window.setFrame_display_(new_frame, True)
             self.window.makeKeyAndOrderFront_(None)
             if reload_on_open and self.webview:
                 self.webview.loadRequest_(

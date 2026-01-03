@@ -45,6 +45,7 @@ class MyLiveWallpaper(rumps.App):
         self.menu = [
             rumps.MenuItem("Refresh Wallpaper", self.refresh_wallpaper),
             rumps.MenuItem("Open Wallpaper Library", self.open_library),
+            rumps.MenuItem("Widget Center", self.open_widget_center),
         ]
 
         # --- Set initial wallpaper if any ---
@@ -60,6 +61,8 @@ class MyLiveWallpaper(rumps.App):
     def open_library(self, _):
         self.windows.open_window("http://localhost:8000/wallpaper_selector/", "Wallpaper Library")
 
+    def open_widget_center(self, _):
+        self.windows.open_window("http://localhost:8000/widget_center/", "Widget Center", width=1200, height=800)
 
     def quit_app(self, _):
         rumps.quit_application()

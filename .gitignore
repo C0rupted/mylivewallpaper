@@ -7,7 +7,7 @@ test.py
 # Build stuff
 __pycache__/
 *.pyc
-mylivewallpaper.build/
-mylivewallpaper.dist/
+main.build/
+main.dist/
 mylivewallpaper.app
 

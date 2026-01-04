@@ -1,14 +1,23 @@
 build:
-	nuitka --standalone --macos-create-app-bundle \
-	--include-data-dir=scripts=scripts \
-	--include-data-dir=static=static \
+	@echo "🔨 Building MyLiveWallpaper..."
+	nuitka \
+	--standalone \
+	--macos-create-app-bundle \
 	--macos-app-name="MyLiveWallpaper" \
 	--macos-signed-app-name="com.c0rupted.mylivewallpaper" \
 	--macos-app-icon=MyLiveWallpaper.icns \
 	--macos-app-version="1.0" \
 	--macos-app-mode=ui-element \
-	mylivewallpaper.py
+	--include-data-dir=web=web \
+	--include-data-dir=examples=examples \
+	--follow-imports \
+	--output-filename=MyLiveWallpaper \
+	main.py
+	@echo "✓ Build complete!"
+	@ls -lhd MyLiveWallpaper.app 2>/dev/null || echo "App bundle location may vary"
 
 
 clean:
-	rm -rf mylivewallpaper.app mylivewallpaper.build mylivewallpaper.dist
+	rm -rf MyLiveWallpaper.app main.build main.dist
+	@echo "Cleaned build artifacts."
+

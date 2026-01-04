@@ -9,7 +9,7 @@ __pycache__/
 *.pyc
 main.build/
 main.dist/
-mylivewallpaper.app
+main.app
 
 # Unsued files (WIP content, deleted code)
 unused/

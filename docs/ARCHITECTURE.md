@@ -86,15 +86,24 @@ Creates and manages auxiliary web windows:
 - Widget Center window (for configuring widgets)
 - Reuses hidden windows when possible for efficiency
 
+### 7. **Settings Manager (lib/settings_manager.py)**
+Handles persistent settings storage:
+- Loads settings from `~/Library/Application Support/MyLiveWallpaper/settings.json`
+- Saves selected wallpaper to `selected_background` key
+- Provides fallback to first wallpaper if saved selection doesn't exist
+- Methods: `get()`, `set()`, `get_selected_background()`, `set_selected_background()`
+- Gracefully handles missing or corrupted JSON files
+
 ## Data Flow
 
 ### Application Startup
 1. `main.py` launches → rumps menu bar app
-2. Flask server starts in background thread
-3. SpaceObserver registers for macOS notifications
-4. WallpaperDaemon creates borderless window
-5. WebKit view loads `http://localhost:8000/` (main wallpaper page)
-6. Initial wallpaper applied to desktop
+2. SettingsManager initializes and loads `settings.json`
+3. Flask server starts in background thread
+4. SpaceObserver registers for macOS notifications
+5. WallpaperDaemon creates borderless window
+6. `initialize_wallpaper()` restores saved wallpaper or uses first available
+7. WebKit view loads `http://localhost:8000/` with current wallpaper
 
 ### Widget Loading
 1. User opens Widget Center
@@ -111,6 +120,7 @@ Creates and manages auxiliary web windows:
 3. JavaScript fetches `/api/wallpapers` list
 4. User clicks wallpaper thumbnail
 5. POST to `/api/select_wallpaper` triggers:
+   - Saves wallpaper choice to `settings.json` via SettingsManager
    - Generates thumbnail if needed (moviepy + Pillow)
    - Sets macOS desktop background
    - SpaceObserver stores path for auto-reapply

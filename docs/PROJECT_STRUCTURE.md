@@ -21,7 +21,8 @@ mylivewallpaper/
 │   ├── system_wallpaper.py      # macOS static wallpaper integration
 │   ├── widget_manager.py        # Widget discovery and management
 │   ├── web_window.py            # Auxiliary window management
-│   └── thumbnails.py            # Thumbnail generation
+│   ├── thumbnails.py            # Thumbnail generation
+│   └── settings_manager.py      # Settings persistence (wallpaper, etc.)
 │
 ├── 📁 web/                      # Frontend web application files
 │   ├── index.html               # Main wallpaper display page
@@ -98,6 +99,7 @@ mylivewallpaper/
 | `main.py` | Application entry point; initializes all systems and menu bar app |
 | `wallpaper_daemon.py` | Creates and manages the borderless desktop window displaying widgets |
 | `web_server.py` | Flask server; provides REST API and serves web interfaces |
+| `settings_manager.py` (lib/) | Manages application settings persistence (JSON-based) |
 | `requirements.txt` | List of Python package dependencies with versions |
 | `Makefile` | Automation for building standalone `.app` bundle with Nuitka |
 | `README.md` | Main project documentation for users and developers |
@@ -114,6 +116,7 @@ Core Python modules providing application functionality:
 | `widget_manager.py` | Widget discovery, configuration management, persistence |
 | `web_window.py` | Creates and manages auxiliary windows (Library, Widget Center) |
 | `thumbnails.py` | Video-to-image conversion for wallpaper previews |
+| `settings_manager.py` | Settings persistence; saves/loads wallpaper selection from JSON |
 
 ### web/ Directory
 
@@ -164,7 +167,8 @@ These directories are created at runtime in user's home directory:
 ~/Library/Application Support/MyLiveWallpaper/
 ├── wallpapers/          # User's wallpaper video files
 ├── widgets/             # User's custom widget folders
-└── widget_config.json   # Widget configuration and positions
+├── widget_config.json   # Widget configuration and positions
+└── settings.json        # Application settings (selected wallpaper, etc.)
 
 /tmp/mylivewallpaper_cache/
 └── *.png                # Cached wallpaper thumbnails

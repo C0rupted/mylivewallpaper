@@ -11,3 +11,6 @@ main.build/
 main.dist/
 mylivewallpaper.app
 
+# Unsued files (WIP content, deleted code)
+unused/
+

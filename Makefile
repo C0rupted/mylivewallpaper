@@ -1,5 +1,5 @@
 build:
-	@echo "🔨 Building MyLiveWallpaper..."
+	@echo "Building MyLiveWallpaper..."
 	nuitka \
 	--standalone \
 	--macos-create-app-bundle \
@@ -13,11 +13,10 @@ build:
 	--follow-imports \
 	--output-filename=MyLiveWallpaper \
 	main.py
-	@echo "✓ Build complete!"
-	@ls -lhd MyLiveWallpaper.app 2>/dev/null || echo "App bundle location may vary"
+	@echo "Build complete!"
 
 
 clean:
-	rm -rf MyLiveWallpaper.app main.build main.dist
+	rm -rf main.app main.build main.dist
 	@echo "Cleaned build artifacts."
 

@@ -1,5 +1,6 @@
-flask
+Flask>=2.0.0
 moviepy
-PIL
-rumps
+Pillow
+rumps>=0.4.0
+PyObjC
 nuitka

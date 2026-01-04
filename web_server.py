@@ -12,6 +12,7 @@ except Exception:
 app = Flask(__name__, static_folder="web", static_url_path="/web")
 wallpaper_daemon = None
 space_observer = None
+settings_manager = None
 
 # Currently selected wallpaper
 current_wallpaper = None
@@ -25,9 +26,23 @@ def get_wallpapers():
     wallpapers.sort()
     return wallpapers
 
-# Set default selection
-if get_wallpapers():
-    current_wallpaper = get_wallpapers()[0]
+# Initialize current wallpaper from settings or use first available
+def initialize_wallpaper():
+    global current_wallpaper
+    wallpapers = get_wallpapers()
+    if not wallpapers:
+        return
+    
+    # Try to load saved wallpaper
+    if settings_manager:
+        saved_wallpaper = settings_manager.get_selected_background()
+        if saved_wallpaper and saved_wallpaper in wallpapers:
+            current_wallpaper = saved_wallpaper
+            return
+    
+    # Fall back to first wallpaper
+    current_wallpaper = wallpapers[0]
+
 
 
 # --- Main page ---
@@ -225,6 +240,11 @@ def select_wallpaper():
         return "Wallpaper not found", 404
 
     current_wallpaper = name
+    
+    # Save to settings
+    if settings_manager:
+        settings_manager.set_selected_background(name)
+    
     wallpaper_image_path = get_thumbnail(current_wallpaper)
 
     if space_observer:

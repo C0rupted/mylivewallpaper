@@ -4,6 +4,7 @@ from wallpaper_daemon import WallpaperDaemon
 from lib.web_window import WebWindowManager
 from lib.system_wallpaper import SpaceObserver, set_macos_wallpaper
 from lib.thumbnails import get_thumbnail
+from lib.settings_manager import SettingsManager
 
 import web_server
 
@@ -19,6 +20,10 @@ class MyLiveWallpaper(rumps.App):
             "MyLiveWallpaper",
             icon="mylivewallpaper.icns"
         )
+
+        # Initialize settings manager
+        settings_manager = SettingsManager()
+        web_server.settings_manager = settings_manager
 
         # Start Flask in background
         flask_thread = threading.Thread(target=run_flask, daemon=True)
@@ -43,6 +48,8 @@ class MyLiveWallpaper(rumps.App):
 
         self.windows = WebWindowManager()
 
+        # Initialize wallpaper with saved settings
+        web_server.initialize_wallpaper()
 
         self.menu = [
             rumps.MenuItem("Refresh Wallpaper", self.refresh_wallpaper),

@@ -15,6 +15,8 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_WIDGET_CONFIG = [
     {"id": "clock", "enabled": True, "x": 100, "y": 100, "height": 100},
     {"id": "sample", "enabled": True, "x": 300, "y": 300, "height": 100},
+    {"id": "status", "enabled": False, "x": 600, "y": 100, "height": 120, "width": 200},
+    {"id": "quote", "enabled": False, "x": 100, "y": 250, "height": 120},
 ]
 
 

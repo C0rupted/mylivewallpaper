@@ -1,3 +1,5 @@
+"""Wallpaper daemon: manages the desktop wallpaper window with widgets."""
+
 from Cocoa import (
     NSApplication,
     NSWindow,
@@ -18,9 +20,11 @@ from WebKit import WKWebView, WKWebViewConfiguration
 from Foundation import NSURL, NSURLRequest
 
 
-
 class WallpaperDaemon:
+    """Manages a borderless window positioned at desktop level for displaying widgets."""
+    
     def create_window(self):
+        """Create the wallpaper window and load the widget page."""
         screen = NSScreen.mainScreen()
         frame = screen.frame()
 
@@ -53,13 +57,13 @@ class WallpaperDaemon:
             NSURLRequest.requestWithURL_(NSURL.URLWithString_("http://localhost:8000/"))
         )
 
-
         self.window.setContentView_(self.webview)
         self.window.makeKeyAndOrderFront_(None)
 
         self._install_mouse_hook()
 
     def _install_mouse_hook(self):
+        """Install a mouse event monitor for debugging click positions."""
         def handler(event):
             pos = event.locationInWindow()
             print(f"Left mouse click at: {pos.x}, {pos.y}")
@@ -70,6 +74,7 @@ class WallpaperDaemon:
         )
 
     def reload(self):
+        """Reload the wallpaper content."""
         if self.webview:
             self.webview.reload()
             print("Wallpaper daemon reloaded!")

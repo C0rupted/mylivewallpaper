@@ -9,18 +9,44 @@ let draggingState = {
     isActive: false,
     widgetIdx: null,
     offsetX: 0,
-    offsetY: 0
+    offsetY: 0,
+    isResizing: false
 };
 
 async function init() {
     try {
+        // First, discover available widgets from filesystem
+        const discoverRes = await fetch(API + "widgets/discover");
+        let availableWidgets = {};
+        if (discoverRes.ok) {
+            const discoverData = await discoverRes.json();
+            availableWidgets = discoverData.widgets || {};
+        }
+
         // Load current config
         const res = await fetch(API + "widgets/config");
         if (!res.ok) throw new Error("Failed to load widget config");
         
         const data = await res.json();
-        widgets = JSON.parse(JSON.stringify(data.widgets)); // Deep copy
-        originalConfig = JSON.parse(JSON.stringify(data.widgets));
+        
+        // Merge discovered widgets with config: add new widgets that exist on filesystem but not in config
+        let configWidgets = data.widgets || [];
+        for (const [widgetId, widgetMeta] of Object.entries(availableWidgets)) {
+            if (!configWidgets.find(w => w.id === widgetId)) {
+                // New widget discovered, add to config
+                configWidgets.push({
+                    id: widgetId,
+                    enabled: false,
+                    x: 100,
+                    y: 100,
+                    height: 100,
+                    aspect_ratio: widgetMeta.aspect_ratio || 2.0
+                });
+            }
+        }
+        
+        widgets = JSON.parse(JSON.stringify(configWidgets)); // Deep copy
+        originalConfig = JSON.parse(JSON.stringify(configWidgets));
         
             // Try to get actual screen dimensions from the backend (both full frame and visibleFrame)
             try {
@@ -115,13 +141,31 @@ function renderCanvas() {
         
         // Drag functionality: compute offsets using boundingClientRect for precision
         preview.addEventListener('mousedown', (e) => {
+            // Check if clicking resize handle
+            if (e.target.classList.contains('widget-resize-handle')) {
+                const rect = preview.getBoundingClientRect();
+                draggingState.isActive = true;
+                draggingState.isResizing = true;
+                draggingState.widgetIdx = idx;
+                draggingState.offsetX = e.clientX;
+                draggingState.offsetY = e.clientY;
+                preview.classList.add('resizing');
+                return;
+            }
+            
             const rect = preview.getBoundingClientRect();
             draggingState.isActive = true;
+            draggingState.isResizing = false;
             draggingState.widgetIdx = idx;
             draggingState.offsetX = e.clientX - rect.left;
             draggingState.offsetY = e.clientY - rect.top;
             preview.classList.add('dragging');
         });
+        
+        // Add resize handle
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'widget-resize-handle';
+        preview.appendChild(resizeHandle);
         
         canvas.appendChild(preview);
     });
@@ -145,6 +189,43 @@ function attachDragHandlers() {
         if (!preview) return;
 
         const canvasRect = canvas.getBoundingClientRect();
+
+        if (draggingState.isResizing) {
+            // Resize from bottom-right
+            const deltaX = e.clientX - draggingState.offsetX;
+            const deltaY = e.clientY - draggingState.offsetY;
+            
+            const widget = widgets[draggingState.widgetIdx];
+            const aspectRatio = widget.aspect_ratio;
+            
+            let newWidth = Math.max(40, preview.offsetWidth + deltaX);
+            let newHeight = Math.max(40, preview.offsetHeight + deltaY);
+            
+            // Apply aspect ratio constraint if not "flex"
+            if (aspectRatio !== "flex" && aspectRatio > 0) {
+                // Prefer width as primary; adjust height to match ratio
+                newHeight = Math.round(newWidth / aspectRatio);
+            }
+            
+            // Constrain to canvas bounds
+            const maxWidth = canvasRect.width - preview.offsetLeft;
+            const maxHeight = canvasRect.height - preview.offsetTop;
+            
+            newWidth = Math.min(newWidth, maxWidth);
+            newHeight = Math.min(newHeight, maxHeight);
+            
+            preview.style.width = newWidth + 'px';
+            preview.style.height = newHeight + 'px';
+            
+            // Store unscaled dimensions
+            widgets[draggingState.widgetIdx].width = Math.round(newWidth / scale);
+            widgets[draggingState.widgetIdx].height = Math.round(newHeight / scale);
+            
+            // Update stored offsets for next move
+            draggingState.offsetX = e.clientX;
+            draggingState.offsetY = e.clientY;
+            return;
+        }
 
         // Calculate desired top-left position relative to canvas using stored offsets
         let newX = e.clientX - canvasRect.left - draggingState.offsetX;
@@ -171,9 +252,11 @@ function attachDragHandlers() {
             const preview = canvas.querySelector(`[data-widget-idx="${draggingState.widgetIdx}"]`);
             if (preview) {
                 preview.classList.remove('dragging');
+                preview.classList.remove('resizing');
             }
             draggingState.isActive = false;
             draggingState.widgetIdx = null;
+            draggingState.isResizing = false;
         }
     };
     

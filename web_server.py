@@ -51,7 +51,8 @@ def widgets_config():
 
 @app.route("/api/widgets/discover")
 def widgets_discover():
-    """Get list of available widgets."""
+    """Get list of available widgets (freshly discovered from filesystem)."""
+    # Force fresh discovery on every call
     widgets = widget_manager.discover_widgets()
     return jsonify({"widgets": {k: {
         "id": v["id"],
@@ -129,14 +130,22 @@ def widget_frame(widget_id):
         * {{
             box-sizing: border-box;
         }}
-        body {{
+        html, body {{
             margin: 0;
             padding: 0;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }}
         #widget-root {{
             width: 100%;
             height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            container-type: size;
         }}
     </style>
     <style>

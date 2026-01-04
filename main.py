@@ -1,10 +1,12 @@
 import threading, rumps
 
-from daemon.wallpaper_daemon import WallpaperDaemon
+from wallpaper_daemon import WallpaperDaemon
 from lib.web_window import WebWindowManager
 from lib.system_wallpaper import SpaceObserver, set_macos_wallpaper
 from lib.thumbnails import get_thumbnail
+
 import web_server
+
 
 
 def run_flask():

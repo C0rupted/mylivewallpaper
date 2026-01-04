@@ -64,11 +64,22 @@ def discover_widgets():
             try:
                 with open(html_file, "r") as f:
                     content = f.read()
-                    # Look for <!-- aspect-ratio: X.X --> comment
+                    # Look for <!-- aspect-ratio: X:X --> or <!-- aspect-ratio: flex --> comment
                     import re
-                    match = re.search(r'<!--\s*aspect-ratio:\s*([\d.]+)\s*-->', content)
+                    match = re.search(r'<!--\s*aspect-ratio:\s*([\w:]+)\s*-->', content)
                     if match:
-                        metadata["aspect_ratio"] = float(match.group(1))
+                        ratio_str = match.group(1)
+                        if ratio_str == "flex":
+                            metadata["aspect_ratio"] = "flex"
+                        else:
+                            # Parse "W:H" format to numeric ratio (W / H)
+                            parts = ratio_str.split(":")
+                            if len(parts) == 2:
+                                try:
+                                    w, h = float(parts[0]), float(parts[1])
+                                    metadata["aspect_ratio"] = w / h if h != 0 else 1.0
+                                except ValueError:
+                                    metadata["aspect_ratio"] = 1.0
             except Exception:
                 pass
             
@@ -90,8 +101,9 @@ def get_widget_config():
     for w in valid_config:
         widget_meta = available[w["id"]]
         w["aspect_ratio"] = widget_meta.get("aspect_ratio", 2.0)
-        # Calculate width from height and aspect ratio
-        w["width"] = int(w["height"] * w["aspect_ratio"])
+        # Calculate width from height and aspect ratio (unless it's "flex" or width is already set)
+        if w["aspect_ratio"] != "flex" and "width" not in w:
+            w["width"] = int(w["height"] * w["aspect_ratio"])
         result.append(w)
     
     return result

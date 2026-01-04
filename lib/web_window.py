@@ -10,12 +10,13 @@ from Cocoa import (
 )
 from WebKit import WKWebView, WKWebViewConfiguration
 from Foundation import NSURL, NSURLRequest
+from objc import super as objc_super
 
 
 class WindowDelegate(NSObject):
     """Delegate to intercept window closing and hide the window instead of destroying."""
     def initWithOwner_(self, owner):
-        self = super().init()
+        self = objc_super(WindowDelegate, self).init()
         if self is None:
             return None
         self.owner = owner

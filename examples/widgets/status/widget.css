@@ -1,0 +1,55 @@
+.status-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(15, 20, 25, 0.7), rgba(25, 30, 40, 0.8));
+  border-radius: 12px;
+  padding: 5cqw;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  gap: 3cqw;
+}
+
+.status-title {
+  font-size: 4cqw;
+  font-weight: 600;
+  color: #00ffd1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.status-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5cqw;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2cqw;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.status-label {
+  font-size: 2.5cqw;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-value {
+  font-size: 3cqw;
+  color: #00ffd1;
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+}

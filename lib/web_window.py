@@ -11,7 +11,6 @@ from Cocoa import (
 from WebKit import WKWebView, WKWebViewConfiguration
 from Foundation import NSURL, NSURLRequest
 from objc import super as objc_super
-from memory_profiler import profile
 
 
 class WindowDelegate(NSObject):
@@ -43,7 +42,6 @@ class WebWindow:
         self.delegate = None
         self.process_pool = process_pool
 
-    @profile
     def create_window(self, url: str, title: str = "WebWindow", width=900, height=600, reload_on_open=True):
         """Create or show the window with the given URL."""
         if self.window is not None:

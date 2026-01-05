@@ -1,5 +1,7 @@
 import threading, rumps
 
+from WebKit import WKProcessPool
+
 from wallpaper_daemon import WallpaperDaemon
 from lib.web_window import WebWindowManager
 from lib.system_wallpaper import SpaceObserver, set_macos_wallpaper
@@ -20,6 +22,8 @@ class MyLiveWallpaper(rumps.App):
             "MyLiveWallpaper",
             icon="mylivewallpaper.icns"
         )
+        
+        PROCESS_POOL = WKProcessPool.alloc().init()
 
         # Initialize settings manager
         settings_manager = SettingsManager()
@@ -42,11 +46,11 @@ class MyLiveWallpaper(rumps.App):
         web_server.space_observer = self.space_observer
 
         # Create wallpaper daemon
-        self.daemon = WallpaperDaemon()
+        self.daemon = WallpaperDaemon(PROCESS_POOL)
         self.daemon.create_window()
         web_server.wallpaper_daemon = self.daemon
 
-        self.windows = WebWindowManager()
+        self.windows = WebWindowManager(PROCESS_POOL)
 
         # Initialize wallpaper with saved settings
         web_server.initialize_wallpaper()

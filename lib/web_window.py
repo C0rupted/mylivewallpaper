@@ -37,10 +37,11 @@ class WindowDelegate(NSObject):
 
 class WebWindow:
     """Represents a single reusable web window."""
-    def __init__(self):
+    def __init__(self, process_pool):
         self.window = None
         self.webview = None
         self.delegate = None
+        self.process_pool = process_pool
 
     @profile
     def create_window(self, url: str, title: str = "WebWindow", width=900, height=600, reload_on_open=True):
@@ -86,8 +87,10 @@ class WebWindow:
         self.window.setDelegate_(self.delegate)
 
         # Create WebView
+        config = WKWebViewConfiguration.alloc().init()
+        config.setProcessPool_(self.process_pool)
         self.webview = WKWebView.alloc().initWithFrame_configuration_(
-            frame, WKWebViewConfiguration.alloc().init()
+            frame, config
         )
         self.webview.loadRequest_(
             NSURLRequest.requestWithURL_(NSURL.URLWithString_(url))
@@ -104,8 +107,9 @@ class WebWindow:
 
 class WebWindowManager:
     """Manages multiple WebWindow instances, reusing hidden windows when possible."""
-    def __init__(self):
+    def __init__(self, process_pool):
         self.windows = []
+        self.process_pool = process_pool
 
     def open_window(self, url: str, title: str = "WebWindow", width=900, height=600):
         """
@@ -120,7 +124,7 @@ class WebWindowManager:
                 return w
 
         # No reusable window → create new
-        w = WebWindow()
+        w = WebWindow(self.process_pool)
         w.create_window(url, title, width, height)
         self.windows.append(w)
         return w

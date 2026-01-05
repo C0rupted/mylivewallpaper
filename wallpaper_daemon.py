@@ -22,6 +22,8 @@ from Foundation import NSURL, NSURLRequest
 
 class WallpaperDaemon:
     """Manages a borderless window positioned at desktop level for displaying widgets."""
+    def __init__(self, process_pool):
+        self.process_pool = process_pool
     
     def create_window(self):
         """Create the wallpaper window and load the widget page."""
@@ -47,8 +49,10 @@ class WallpaperDaemon:
         self.window.setOpaque_(False)
         self.window.setBackgroundColor_(NSColor.clearColor())
 
+        config = WKWebViewConfiguration.alloc().init()
+        config.setProcessPool_(self.process_pool)
         self.webview = WKWebView.alloc().initWithFrame_configuration_(
-            frame, WKWebViewConfiguration.alloc().init()
+            frame, config
         )
         self.webview.setValue_forKey_(False, "drawsBackground")
         self.webview.setOpaque_(False)

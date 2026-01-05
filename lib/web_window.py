@@ -11,6 +11,7 @@ from Cocoa import (
 from WebKit import WKWebView, WKWebViewConfiguration
 from Foundation import NSURL, NSURLRequest
 from objc import super as objc_super
+from memory_profiler import profile
 
 
 class WindowDelegate(NSObject):
@@ -23,12 +24,15 @@ class WindowDelegate(NSObject):
         return self
 
     def windowWillClose_(self, notification):
-        """Hide the window instead of destroying it."""
         window = notification.object()
         window.orderOut_(None)
-        # Optionally free heavy content (WebView) if memory is a concern:
-        # self.owner.webview.removeFromSuperview()
-        # self.owner.webview = None
+
+        if self.owner.webview:
+            self.owner.webview.stopLoading()
+            self.owner.webview.removeFromSuperview()
+            self.owner.webview = None
+            self.owner.window = None
+
 
 
 class WebWindow:
@@ -38,6 +42,7 @@ class WebWindow:
         self.webview = None
         self.delegate = None
 
+    @profile
     def create_window(self, url: str, title: str = "WebWindow", width=900, height=600, reload_on_open=True):
         """Create or show the window with the given URL."""
         if self.window is not None:
